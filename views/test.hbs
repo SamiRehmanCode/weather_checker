@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Search</title>
+</head>
+<body>
+    <div class="container">
+        <div class="search-box">
+            <form id="weatherForm">
+                <input type="text" class="search-input" id="locationInput" placeholder="Enter Location (e.g., New York, NY)" required>
+                <button type="submit" id="search-button">Search</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="container w-25">
+        <div class="row">
+            <div class="col-md-12 col-12 mx-auto">
+                <div class="weather-card my-2 mb-3 card temperature information">
+                    <div class="card-body outputed p-5">
+                        <h5 class="card-title output">Get Output Here</h5>
+                        <p class="card-text">Date: <span id="currentDate"></span></p>
+                        <p id="country">Country</p>
+                        <p id="currentTemperature">Temperature: <span id="temperature"></span><sup>o</sup>C</p>
+                        <p id="currentWeather">Weather: <span id="weatherStatus"></span></p>
+                        <p id="temp_status"><i class="fa-solid fa-cloud"></i></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Date making
+        const currentDateElement = document.getElementById('currentDate');
+        const searchButton = document.getElementById('search-button');
+        const temperatureElement = document.getElementById('temperature');
+        const weatherStatusElement = document.getElementById('weatherStatus');
+        const input = document.getElementById('locationInput');
+        const country = document.getElementById('country');
+        const output = document.querySelector('.outputed');
+
+        // Simulated weather data (replace with actual data retrieval)
+        const today = new Date();
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        currentDateElement.textContent = today.toLocaleDateString(undefined, options);
+
+        searchButton.addEventListener('click', async (event) => {
+            event.preventDefault();
+            const cityval = input.value;
+
+            if (cityval.trim() === '') {
+                output.innerText = 'Please write a correct name';
+            } else {
+                try {
+                    let url = `http://api.openweathermap.org/data/2.5/weather?q=${cityval}&units=metric&appid=77c162c53730f79db93e24a35c542c86`;
+                    const response = await fetch(url);
+                    const data = await response.json();
+                    console.log(data);
+
+                    country.innerText = `${data.name}, ${data.sys.country}`;
+                    temperatureElement.innerText = data.main.temp;
+                    weatherStatusElement.innerText = data.weather[0].main;
+
+                } catch (error) {
+                    output.innerText = 'Please write a correct city name';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+<style>
+    body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f4f4f4;
+}
+
+.container {
+    text-align: center;
+}
+
+.weather-app {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+}
+
+h1 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+#search-button {
+    background-color: #009ad8;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.weather-card {
+    background-color: #f5f5f5;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-top: 20px;
+    text-align: left;
+}
+
+.card-body {
+    font-size: 18px;
+    color: #333;
+}
+
+.date, .country, .temperature, .weather-status {
+    margin: 10px 0;
+}
+
+</style>

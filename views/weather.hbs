@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {{>metatags}}
+    <title>Weather Search</title>
+</head>
+<body>
+    {{>navbar}}
+    <div class="body">
+        <div class="container">
+            <div class="search-box">
+                <form id="weatherForm">
+                    <input type="text" class="search-input" id="locationInput" placeholder="Enter Location (e.g., New York, NY)" required>
+                    <button type="submit" id="search-button">Search</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="container w-25">
+            <div class="row">
+                <div class="col-md-12 col-12 mx-auto">
+                    <div class="weather-card my-2 mb-3 card temperature information">
+                        <div class="card-body outputed p-5">
+                            <h5 class="card-title output">Get Output Here</h5>
+                            <p class="time">Time: <span id="currentTime"></span></p>
+                            <p class="date">Date: <span id="currentDate"></span></p>
+                            <p id="country">Country</p>
+                            <p id="currentTemperature">Temperature: <span id="temperature"></span><sup>o</sup>C</p>
+                            <p id="currentWeather">Weather: <span id="weatherStatus"></span></p>
+                            <p id="temp_status"><i class="fa-solid fa-cloud"></i></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{>footer}}
+
+    <script>
+        const currentDateElement = document.getElementById('currentDate');
+        const currentTimeElement = document.getElementById('currentTime');
+        const temperatureElement = document.getElementById('temperature');
+        const weatherStatusElement = document.getElementById('weatherStatus');
+        const input = document.getElementById('locationInput');
+        const country = document.getElementById('country');
+        const output = document.querySelector('.outputed');
+        const temp_status = document.getElementById('temp_status')
+
+        function updateTime() {
+            const now = new Date();
+            const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit' };
+            const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            currentTimeElement.textContent = now.toLocaleTimeString(undefined, timeOptions);
+            currentDateElement.textContent = now.toLocaleDateString(undefined, dateOptions);
+        }
+
+        updateTime();
+        setInterval(updateTime, 1000);
+
+        function setWeatherIcon(tempMood) {
+         let icon = '';
+            switch (tempMood) {
+             case 'clear':
+            icon = '<i class="fa-solid fa-sun"></i>';
+            break;
+            case 'clouds':
+            icon = '<i class="fa-solid fa-cloud"></i>';
+            break;
+            case 'rain':
+            icon = '<i class="fa-solid fa-cloud-rain"></i>';
+            break;
+            default:
+            icon = '<i class="fa-solid fa-question"></i>'; // Default icon for unknown conditions
+            break;
+    }
+    return icon;
+}
+
+        const searchButton = document.querySelector('#search-button');
+        searchButton.addEventListener('click', async (event) => {
+            event.preventDefault();
+            const cityval = input.value.trim();
+            
+
+            if (cityval === '') {
+                output.innerText = 'Please write a correct name';
+            } else {
+                try {
+                    const url = `http://api.openweathermap.org/data/2.5/weather?q=${cityval}&units=metric&appid=77c162c53730f79db93e24a35c542c86`;
+                    const response = await fetch(url);
+                    const data = await response.json();
+                    console.log(data);
+
+                    country.innerText = `${data.name}, ${data.sys.country}`;
+                    temperatureElement.innerText = data.main.temp;
+                    weatherStatusElement.innerText = data.weather[0].main;
+
+                    // get the mood
+                   const tempMood = data.weather[0].main.toLowerCase();
+                   temp_status.innerHTML = setWeatherIcon(tempMood);
+                } catch (error) {
+                    output.innerText = 'Please write a correct city name';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+
+<style>
+    .body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f4f4f4;
+    }
+
+    .container {
+        text-align: center;
+    }
+
+    .weather-card {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        text-align: center;
+    }
+
+    h5 {
+        font-size: 24px;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    .search-input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    #search-button {
+        background-color: #009ad8;
+        color: #fff;
+        padding: 10px 
+    }

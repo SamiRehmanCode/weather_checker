@@ -7,36 +7,39 @@
     <title>Weather Search</title>
 </head>
 <body>
-    {{>navbar}}
-    <div class="body">
-        <div class="container">
-            <div class="search-box">
-                <form id="weatherForm">
-                    <input type="text" class="search-input" id="locationInput" placeholder="Enter Location (e.g., New York, NY)" required>
-                    <button type="submit" id="search-button">Search</button>
-                </form>
-            </div>
+   {{>navbar}}
+<div class="body">
+    <div class="container">
+        <div class="search-box">
+            <form id="weatherForm" class="mb-3">
+                <div class="input-group">
+                    <input type="text" class="form-control search-input" id="locationInput" placeholder="Enter Location (e.g., New York, NY)" required>
+                    <button type="submit" class="btn btn-primary" id="search-button">Search</button>
+                </div>
+            </form>
         </div>
+    </div>
 
-        <div class="container w-25">
-            <div class="row">
-                <div class="col-md-12 col-12 mx-auto">
-                    <div class="weather-card my-2 mb-3 card temperature information">
-                        <div class="card-body outputed p-5">
-                            <h5 class="card-title output">Get Output Here</h5>
-                            <p class="time">Time: <span id="currentTime"></span></p>
-                            <p class="date">Date: <span id="currentDate"></span></p>
-                            <p id="country">Country</p>
-                            <p id="currentTemperature">Temperature: <span id="temperature"></span><sup>o</sup>C</p>
-                            <p id="currentWeather">Weather: <span id="weatherStatus"></span></p>
-                            <p id="temp_status"><i class="fa-solid fa-cloud"></i></p>
-                        </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-12 mx-auto">
+                <div class="weather-card my-2 mb-3 card temperature information">
+                    <div class="card-body outputed p-3">
+                        <h5 class="card-title output">Get Output Here</h5>
+                        <p class="time">Time: <span id="currentTime"></span></p>
+                        <p class="date">Date: <span id="currentDate"></span></p>
+                        <p id="country">Country</p>
+                        <p id="currentTemperature">Temperature: <span id="temperature"></span><sup>o</sup>C</p>
+                        <p id="currentWeather">Weather: <span id="weatherStatus"></span></p>
+                        <p id="temp_status"><i class="fa-solid fa-cloud"></i></p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    {{>footer}}
+</div>
+{{>footer}}
+
 
     <script>
         const currentDateElement = document.getElementById('currentDate');

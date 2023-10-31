@@ -55,7 +55,7 @@
                 output.innerText = 'Please write a correct name';
             } else {
                 try {
-                    let url = `http://api.openweathermap.org/data/2.5/weather?q=${cityval}&units=metric&appid=77c162c53730f79db93e24a35c542c86`;
+                    let url = `https://api.openweathermap.org/data/2.5/weather?q=${cityval}&units=metric&appid=77c162c53730f79db93e24a35c542c86`;
                     const response = await fetch(url);
                     const data = await response.json();
                     console.log(data);
